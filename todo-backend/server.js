@@ -6,7 +6,7 @@ app.use(cors());
 app.use(express.json());
 
 let todos = [
-  { id: 1, text: "Sample task", completed: false }
+  { id: 1, text: "Sample task", completed: false, priority: 'medium', dueDate: null }
 ];
 
 let idCounter = 2;
@@ -19,7 +19,9 @@ app.post('/todos', (req, res) => {
   const todo = {
     id: idCounter++,
     text: req.body.text,
-    completed: false
+    completed: false,
+    priority: req.body.priority || 'medium',
+    dueDate: req.body.dueDate || null
   };
   todos.push(todo);
   res.json(todo);
@@ -38,6 +40,8 @@ app.put('/todos/:id', (req, res) => {
   if (todo) {
     if (req.body.text !== undefined) todo.text = req.body.text;
     if (req.body.completed !== undefined) todo.completed = req.body.completed;
+    if (req.body.priority !== undefined) todo.priority = req.body.priority;
+    if (req.body.dueDate !== undefined) todo.dueDate = req.body.dueDate;
   }
 
   res.json(todo);

@@ -15,12 +15,27 @@ export class App {
   todos:any[] = [];
   filteredTodos:any[] = [];
   newTodo = "";
+  newPriority = "medium";
+  newDueDate = "";
   editId:any = null;
   editText = "";
+  editPriority = "";
+  editDueDate = "";
   filter: string = 'all';
+  searchText = "";
 
   constructor(private todoService:TodoService){
     this.loadTodos();
+  }
+
+  get progressPercentage(): number {
+    if(this.todos.length === 0) return 0;
+    const completed = this.todos.filter(t => t.completed).length;
+    return Math.round((completed / this.todos.length) * 100);
+  }
+
+  get allCompleted(): boolean {
+    return this.todos.length > 0 && this.todos.every(t => t.completed);
   }
 
   loadTodos(){
@@ -31,13 +46,23 @@ export class App {
   }
 
   applyFilter(){
-    if(this.filter === 'all'){
-      this.filteredTodos = this.todos;
-    } else if(this.filter === 'active'){
-      this.filteredTodos = this.todos.filter(t => !t.completed);
+    let filtered = this.todos;
+    
+    // Apply status filter
+    if(this.filter === 'active'){
+      filtered = filtered.filter(t => !t.completed);
     } else if(this.filter === 'completed'){
-      this.filteredTodos = this.todos.filter(t => t.completed);
+      filtered = filtered.filter(t => t.completed);
     }
+    
+    // Apply search filter
+    if(this.searchText.trim()){
+      filtered = filtered.filter(t => 
+        t.text.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+    
+    this.filteredTodos = filtered;
   }
 
   setFilter(filter: string){
@@ -45,12 +70,27 @@ export class App {
     this.applyFilter();
   }
 
-  addTodo(){
-    if(!this.newTodo) return;
+  onSearchChange(){
+    this.applyFilter();
+  }
 
-    this.todoService.addTodo({text:this.newTodo})
+  isOverdue(todo: any): boolean {
+    if(!todo.dueDate || todo.completed) return false;
+    return new Date(todo.dueDate) < new Date();
+  }
+
+  addTodo(){
+    if(!this.newTodo.trim()) return;
+
+    this.todoService.addTodo({
+      text: this.newTodo,
+      priority: this.newPriority,
+      dueDate: this.newDueDate || null
+    })
     .subscribe(()=>{
-      this.newTodo="";
+      this.newTodo = "";
+      this.newPriority = "medium";
+      this.newDueDate = "";
       this.loadTodos();
     });
   }
@@ -71,14 +111,24 @@ export class App {
   startEdit(todo:any){
     this.editId = todo.id;
     this.editText = todo.text;
+    this.editPriority = todo.priority;
+    this.editDueDate = todo.dueDate || "";
   }
 
   updateTodo(){
-    this.todoService.updateTodo(this.editId,{text:this.editText})
+    this.todoService.updateTodo(this.editId, {
+      text: this.editText,
+      priority: this.editPriority,
+      dueDate: this.editDueDate || null
+    })
     .subscribe(()=>{
       this.editId = null;
       this.loadTodos();
     });
+  }
+
+  getPriorityClass(priority: string): string {
+    return `priority-${priority}`;
   }
 
 }

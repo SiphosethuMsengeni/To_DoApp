@@ -7,7 +7,8 @@ body{
 }
 
 .container{
-  width: 400px;
+  max-width: 600px;
+  width: 90%;
   margin: 50px auto;
   background: linear-gradient(to bottom, #fff 0%, #fff5fa 100%);
   padding: 30px;
@@ -20,14 +21,124 @@ h1{
   text-align: center;
   color: #ff2e93;
   font-size: 32px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   text-shadow: 2px 2px 4px rgba(255, 182, 217, 0.3);
 }
 
+/* Progress Bar */
+.progress-container{
+  margin-bottom: 20px;
+}
+
+.progress-bar{
+  width: 100%;
+  height: 20px;
+  background: #ffe6f0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #ffc0e0;
+}
+
+.progress-fill{
+  height: 100%;
+  background: linear-gradient(90deg, #ff2e93 0%, #ff7ab6 100%);
+  transition: width 0.5s ease;
+}
+
+.progress-text{
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #d91c7a;
+  font-weight: 600;
+}
+
+/* Celebration */
+.celebration{
+  background: linear-gradient(135deg, #ff2e93 0%, #ff7ab6 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 16px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* Add Box */
 .addBox{
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+
+.task-input{
+  flex: 2;
+  min-width: 200px;
+}
+
+.priority-select{
+  flex: 0.8;
+  padding: 12px 10px;
+  border: 2px solid #ffb6d9;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fff;
+  cursor: pointer;
+}
+
+.date-input{
+  flex: 1;
+  padding: 12px 10px;
+  border: 2px solid #ffb6d9;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fff;
+}
+
+.add-btn{
+  flex: 0.5;
+  min-width: 80px;
+  background: linear-gradient(135deg, #ff2e93 0%, #ff4d9e 100%);
+  color: white;
+}
+
+.add-btn:hover{
+  background: linear-gradient(135deg, #ff1a7e 0%, #ff3889 100%);
+}
+
+/* Search Box */
+.search-box{
+  margin-bottom: 15px;
+}
+
+.search-input{
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ffb6d9;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.search-input:focus{
+  border-color: #ff2e93;
+  box-shadow: 0 0 0 3px rgba(255, 46, 147, 0.1);
 }
 
 input{
@@ -153,9 +264,21 @@ li.completed{
   background: linear-gradient(135deg, #f0f0f0 0%, #fafafa 100%);
 }
 
+li.overdue:not(.completed){
+  border: 2px solid #ff4d6d;
+  background: linear-gradient(135deg, #ffe0e6 0%, #ffeef2 100%);
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
 .todo-content{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   gap: 12px;
 }
@@ -166,10 +289,17 @@ li.completed{
   cursor: pointer;
   accent-color: #ff2e93;
   flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.todo-info{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .todo-text{
-  flex: 1;
   font-size: 16px;
   color: #d91c7a;
   font-weight: 500;
@@ -182,20 +312,98 @@ li.completed .todo-text{
   color: #999;
 }
 
+.todo-meta{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.priority-badge{
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.priority-high{
+  background: linear-gradient(135deg, #ff4d6d 0%, #ff8fa3 100%);
+  color: white;
+}
+
+.priority-medium{
+  background: linear-gradient(135deg, #ffd93d 0%, #ffe066 100%);
+  color: #8b5e00;
+}
+
+.priority-low{
+  background: linear-gradient(135deg, #6bcf7f 0%, #8ce99a 100%);
+  color: white;
+}
+
+.due-date{
+  font-size: 12px;
+  color: #ff2e93;
+  font-weight: 500;
+}
+
+li.overdue:not(.completed) .due-date{
+  color: #ff4d6d;
+  font-weight: 700;
+}
+
 .todo-actions{
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .edit-content{
   display: flex;
-  align-items: center;
+  flex-direction: column;
   width: 100%;
+  gap: 10px;
+}
+
+.edit-form{
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .edit-input{
+  flex: 2;
+  min-width: 150px;
+}
+
+.priority-select-small{
   flex: 1;
+  padding: 10px;
+  border: 2px solid #ffb6d9;
+  border-radius: 8px;
+  font-size: 12px;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+}
+
+.date-input-small{
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ffb6d9;
+  border-radius: 8px;
+  font-size: 12px;
+  outline: none;
+  background: #fff;
+}
+
+.edit-actions{
+  display: flex;
+  gap: 8px;
 }
 
 .edit{
@@ -243,7 +451,8 @@ footer{
   background: linear-gradient(135deg, #ff2e93 0%, #ff7ab6 100%);
   color: white;
   border-radius: 15px;
-  max-width: 400px;
+  max-width: 600px;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0 8px 20px rgba(255, 46, 147, 0.3);
