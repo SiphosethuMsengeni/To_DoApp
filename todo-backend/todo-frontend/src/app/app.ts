@@ -13,9 +13,11 @@ import { TodoService } from './todo.service';
 export class App {
 
   todos:any[] = [];
+  filteredTodos:any[] = [];
   newTodo = "";
   editId:any = null;
   editText = "";
+  filter: string = 'all';
 
   constructor(private todoService:TodoService){
     this.loadTodos();
@@ -24,7 +26,23 @@ export class App {
   loadTodos(){
     this.todoService.getTodos().subscribe((data:any)=>{
       this.todos = data;
+      this.applyFilter();
     });
+  }
+
+  applyFilter(){
+    if(this.filter === 'all'){
+      this.filteredTodos = this.todos;
+    } else if(this.filter === 'active'){
+      this.filteredTodos = this.todos.filter(t => !t.completed);
+    } else if(this.filter === 'completed'){
+      this.filteredTodos = this.todos.filter(t => t.completed);
+    }
+  }
+
+  setFilter(filter: string){
+    this.filter = filter;
+    this.applyFilter();
   }
 
   addTodo(){
@@ -38,8 +56,16 @@ export class App {
   }
 
   deleteTodo(id:number){
-    this.todoService.deleteTodo(id)
-    .subscribe(()=> this.loadTodos());
+    if(confirm('Are you sure you want to delete this task?')){
+      this.todoService.deleteTodo(id)
+      .subscribe(()=> this.loadTodos());
+    }
+  }
+
+  toggleComplete(todo:any){
+    todo.completed = !todo.completed;
+    this.todoService.updateTodo(todo.id, {completed: todo.completed})
+    .subscribe(()=> this.applyFilter());
   }
 
   startEdit(todo:any){

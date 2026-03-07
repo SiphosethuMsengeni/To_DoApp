@@ -3,27 +3,44 @@
 <h1>💗 Todo List</h1>
 
 <div class="addBox">
-<input [(ngModel)]="newTodo" placeholder="Enter task">
-<button (click)="addTodo()">Add</button>
+<input [(ngModel)]="newTodo" placeholder="Enter task" (keyup.enter)="addTodo()">
+<button (click)="addTodo()">+ Add</button>
+</div>
+
+<div class="filters">
+<button [class.active]="filter === 'all'" (click)="setFilter('all')">All</button>
+<button [class.active]="filter === 'active'" (click)="setFilter('active')">Active</button>
+<button [class.active]="filter === 'completed'" (click)="setFilter('completed')">Completed</button>
+</div>
+
+<div class="empty-state" *ngIf="filteredTodos.length === 0">
+<div class="empty-icon">📋</div>
+<p *ngIf="filter === 'all'">No tasks yet. Add one above!</p>
+<p *ngIf="filter === 'active'">No active tasks. Great job! 🎉</p>
+<p *ngIf="filter === 'completed'">No completed tasks yet.</p>
 </div>
 
 <ul>
 
-<li *ngFor="let todo of todos">
+<li *ngFor="let todo of filteredTodos" [class.completed]="todo.completed">
 
-<div *ngIf="editId !== todo.id">
+<div *ngIf="editId !== todo.id" class="todo-content">
 
-<span>{{todo.text}}</span>
+<input type="checkbox" [checked]="todo.completed" (change)="toggleComplete(todo)" class="checkbox">
+<span class="todo-text">{{todo.text}}</span>
 
-<button class="edit" (click)="startEdit(todo)">Edit</button>
-<button class="delete" (click)="deleteTodo(todo.id)">Delete</button>
+<div class="todo-actions">
+<button class="edit" (click)="startEdit(todo)">✏️ Edit</button>
+<button class="delete" (click)="deleteTodo(todo.id)">🗑️ Delete</button>
+</div>
 
 </div>
 
-<div *ngIf="editId === todo.id">
+<div *ngIf="editId === todo.id" class="edit-content">
 
-<input [(ngModel)]="editText">
-<button class="save" (click)="updateTodo()">Save</button>
+<input [(ngModel)]="editText" class="edit-input" (keyup.enter)="updateTodo()">
+<button class="save" (click)="updateTodo()">💾 Save</button>
+<button class="cancel" (click)="editId = null">❌ Cancel</button>
 
 </div>
 

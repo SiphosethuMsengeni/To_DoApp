@@ -1,6 +1,6 @@
 body{
   background: linear-gradient(135deg, #ffc0e0 0%, #ffe6f0 100%);
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -77,6 +77,51 @@ ul{
   margin: 0;
 }
 
+.filters{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.filters button{
+  padding: 8px 16px;
+  background: white;
+  color: #ff2e93;
+  border: 2px solid #ffc0e0;
+  border-radius: 20px;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.filters button:hover{
+  background: #fff0f8;
+  transform: translateY(0);
+}
+
+.filters button.active{
+  background: linear-gradient(135deg, #ff2e93 0%, #ff7ab6 100%);
+  color: white;
+  border-color: #ff2e93;
+}
+
+.empty-state{
+  text-align: center;
+  padding: 40px 20px;
+  color: #d91c7a;
+}
+
+.empty-icon{
+  font-size: 60px;
+  margin-bottom: 15px;
+  opacity: 0.6;
+}
+
+.empty-state p{
+  font-size: 16px;
+  font-weight: 500;
+}
+
 li{
   margin-top: 12px;
   padding: 15px;
@@ -84,6 +129,18 @@ li{
   border-radius: 10px;
   border: 1px solid #ffc0e0;
   transition: all 0.3s;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 li:hover{
@@ -91,29 +148,54 @@ li:hover{
   box-shadow: 0 4px 12px rgba(255, 46, 147, 0.2);
 }
 
-li > div{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
+li.completed{
+  opacity: 0.7;
+  background: linear-gradient(135deg, #f0f0f0 0%, #fafafa 100%);
 }
 
-li span{
+.todo-content{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.checkbox{
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #ff2e93;
+  flex-shrink: 0;
+}
+
+.todo-text{
   flex: 1;
   font-size: 16px;
   color: #d91c7a;
   font-weight: 500;
   word-break: break-word;
+  transition: all 0.3s;
 }
 
-li input{
+li.completed .todo-text{
+  text-decoration: line-through;
+  color: #999;
+}
+
+.todo-actions{
+  display: flex;
+  gap: 8px;
+}
+
+.edit-content{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.edit-input{
   flex: 1;
-  margin-right: 10px;
-}
-
-li button{
-  white-space: nowrap;
 }
 
 .edit{
@@ -137,12 +219,21 @@ li button{
 }
 
 .save{
-  background: linear-gradient(135deg, #c71585 0%, #ff2e93 100%);
+  background: linear-gradient(135deg, #28a745 0%, #5cb85c 100%);
   color: white;
 }
 
 .save:hover{
-  background: linear-gradient(135deg, #a0116a 0%, #c71585 100%);
+  background: linear-gradient(135deg, #218838 0%, #28a745 100%);
+}
+
+.cancel{
+  background: linear-gradient(135deg, #6c757d 0%, #868e96 100%);
+  color: white;
+}
+
+.cancel:hover{
+  background: linear-gradient(135deg, #5a6268 0%, #6c757d 100%);
 }
 
 footer{
