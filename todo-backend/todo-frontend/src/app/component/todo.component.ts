@@ -8,7 +8,7 @@ import { TodoService } from '../todo.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './todo.component.html',
-  styleUrl: './todo.component.css'
+  styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
 
