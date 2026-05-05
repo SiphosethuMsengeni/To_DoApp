@@ -1,115 +1,14 @@
-<div class="container">
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/">💗 Todo App</a>
 
-<h1>💗 Todo List</h1>
+    <nav class="nav-links" aria-label="Primary">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Tasks</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+    </nav>
+  </header>
 
-<!-- Progress Bar -->
-<div class="progress-container" *ngIf="todos.length > 0">
-  <div class="progress-bar">
-    <div class="progress-fill" [style.width.%]="progressPercentage"></div>
-  </div>
-  <span class="progress-text">{{progressPercentage}}% Complete ({{todos.filter(t => t.completed).length}}/{{todos.length}})</span>
+  <main class="page-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
-
-<!-- Celebration -->
-<div class="celebration" *ngIf="allCompleted">
-  🎉 All tasks completed! Great job! 🎉
-</div>
-
-<!-- Add Task Form -->
-<div class="addBox">
-  <input [(ngModel)]="newTodo" placeholder="Enter task" (keyup.enter)="addTodo()" class="task-input">
-  
-  <select [(ngModel)]="newPriority" class="priority-select">
-    <option value="high">🔴 High</option>
-    <option value="medium">🟡 Medium</option>
-    <option value="low">🟢 Low</option>
-  </select>
-  
-  <input type="date" [(ngModel)]="newDueDate" class="date-input">
-  
-  <button (click)="addTodo()" class="add-btn">+ Add</button>
-</div>
-
-<!-- Search Bar -->
-<div class="search-box">
-  <input [(ngModel)]="searchText" (ngModelChange)="onSearchChange()" placeholder="🔍 Search tasks..." class="search-input">
-</div>
-
-<!-- Filters -->
-<div class="filters">
-  <button [class.active]="filter === 'all'" (click)="setFilter('all')">All</button>
-  <button [class.active]="filter === 'active'" (click)="setFilter('active')">Active</button>
-  <button [class.active]="filter === 'completed'" (click)="setFilter('completed')">Completed</button>
-</div>
-
-<!-- Empty State -->
-<div class="empty-state" *ngIf="filteredTodos.length === 0">
-  <div class="empty-icon">📋</div>
-  <p *ngIf="filter === 'all' && searchText === ''">No tasks yet. Add one above!</p>
-  <p *ngIf="filter === 'active'">No active tasks. Great job! 🎉</p>
-  <p *ngIf="filter === 'completed'">No completed tasks yet.</p>
-  <p *ngIf="searchText !== ''">No tasks found matching "{{searchText}}"</p>
-</div>
-
-<!-- Task List -->
-<ul>
-
-<li *ngFor="let todo of filteredTodos" [class.completed]="todo.completed" [class.overdue]="isOverdue(todo)">
-
-<div *ngIf="editId !== todo.id" class="todo-content">
-
-<input type="checkbox" [checked]="todo.completed" (change)="toggleComplete(todo)" class="checkbox">
-
-<div class="todo-info">
-  <span class="todo-text">{{todo.text}}</span>
-  <div class="todo-meta">
-    <span class="priority-badge" [ngClass]="getPriorityClass(todo.priority)">
-      <span *ngIf="todo.priority === 'high'">🔴</span>
-      <span *ngIf="todo.priority === 'medium'">🟡</span>
-      <span *ngIf="todo.priority === 'low'">🟢</span>
-      {{todo.priority}}
-    </span>
-    <span class="due-date" *ngIf="todo.dueDate">
-      📅 {{todo.dueDate}}
-    </span>
-  </div>
-</div>
-
-<div class="todo-actions">
-  <button class="edit" (click)="startEdit(todo)">✏️ Edit</button>
-  <button class="delete" (click)="deleteTodo(todo.id)">🗑️ Delete</button>
-</div>
-
-</div>
-
-<div *ngIf="editId === todo.id" class="edit-content">
-
-<div class="edit-form">
-  <input [(ngModel)]="editText" class="edit-input" (keyup.enter)="updateTodo()">
-  
-  <select [(ngModel)]="editPriority" class="priority-select-small">
-    <option value="high">🔴 High</option>
-    <option value="medium">🟡 Medium</option>
-    <option value="low">🟢 Low</option>
-  </select>
-  
-  <input type="date" [(ngModel)]="editDueDate" class="date-input-small">
-</div>
-
-<div class="edit-actions">
-  <button class="save" (click)="updateTodo()">💾 Save</button>
-  <button class="cancel" (click)="editId = null">❌ Cancel</button>
-</div>
-
-</div>
-
-</li>
-
-</ul>
-
-</div>
-
-<footer>
-  <p>Made with 💗 by Siphosethu Msengeni</p>
-  <p class="year">© 2026 | Todo App</p>
-</footer>
